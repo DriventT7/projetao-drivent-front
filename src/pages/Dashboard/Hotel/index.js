@@ -9,7 +9,8 @@ export default function Hotel() {
   const [ticket, setTicket] = useState({});
   const [hoteis, setHoteis] = useState([]);
   const [ticketType, setTicketType] = useState({});
-  const [choosenHotel, setChoosenHotel] = useState(false);
+  const [chosenHotel, setChosenHotel] = useState(-1);
+  const [hotelInfos, setHotelInfos] = useState();
   const token = useToken();
   
   useEffect(() => {
@@ -45,9 +46,17 @@ export default function Hotel() {
     });
   }
 
-  function Hotel( { image, name, choosenHotel, setChoosenHotel } ) { 
+  function Hotel( { image, name, index, id } ) { 
+    function selectHotel(index) {
+      return setChosenHotel(index);
+    }
+
+    function hotel(id) {
+      return setHotelInfos(id);
+    }
+
     return (
-      <CardHotel color={choosenHotel ? '#FFEED2' : '#EBEBEB'} >
+      <CardHotel color={chosenHotel === index ? '#FFEED2' : '#EBEBEB' } onClick={function() { selectHotel(index); hotel(id);}}>
         <img src={image} alt={name} />
         <h3>{name}</h3>
       </CardHotel>
@@ -68,6 +77,8 @@ export default function Hotel() {
                   image={item.image}
                   name={item.name}
                   key={index}
+                  index={index}
+                  id={item.id}
                 />
               ) 
               }
