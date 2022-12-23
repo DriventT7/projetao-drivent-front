@@ -10,8 +10,11 @@ export default function Hotel() {
   const [hoteis, setHoteis] = useState([]);
   const [ticketType, setTicketType] = useState({});
   const [chosenHotel, setChosenHotel] = useState(-1);
+  const [err, setErr] = useState(0);
   const [hotelInfos, setHotelInfos] = useState();
   const token = useToken();
+
+  console.log(err);
   
   useEffect(() => {
     const promise = getTicket(token);
@@ -20,7 +23,9 @@ export default function Hotel() {
     });
 
     promise.catch(err => {
-      alert(err);
+      if(err.request.status === 404) {
+        setErr(404);
+      }
     });
   }, []);
 
@@ -65,7 +70,7 @@ export default function Hotel() {
 
   return (
     <>
-      {ticket.status === 'RESERVED' ? 
+      {ticket.status === 'RESERVED' || err === 404 ? 
         <Container><Label>Você precisa ter confirmado pagamento antes de fazer a escolha de hospedagem</Label></Container> :
         ticket.status === 'PAID' && ticketType.includesHotel === true ?
           <>
