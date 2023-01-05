@@ -6,8 +6,12 @@ export async function payment(ticketId, value, cardIssuer, cardLastDigits ) {
   return response.data;
 }
 
-export async function createTicketType(name, price, isRemote, includesHotel) { //criar rota no back?
-  const response = await api.post('/ticket/types', { name, price, isRemote, includesHotel });
+export async function createTicketType( price, isRemote, includesHotel, token) { 
+  const response = await api.post('/tickets/types', { price, isRemote, includesHotel }, {
+    headers: {
+      Authorization: `Bearer ${token}`
+    }
+  });
 
   return response.data;
 }
