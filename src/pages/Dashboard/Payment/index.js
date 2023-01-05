@@ -9,6 +9,8 @@ import {
   NoHotel, 
   WithHotel, 
   Button } from '../../../components/Payments/payment';
+import useToken from '../../../hooks/useToken';
+import { toast } from 'react-toastify';
 import { createTicketType } from '../../../services/paymentsApi';
 
 export default function Payment() {
@@ -17,6 +19,7 @@ export default function Payment() {
   const [selectNoHotel, setSelectNoHotel] = useState(false);
   const [selectWithHotel, setSelectWithHotel] = useState(false);
   const [total, setTotal] = useState(0);
+  const token = useToken();
 
   function choosePresencial() {
     if(selectOnline) {
@@ -60,6 +63,10 @@ export default function Payment() {
     if (!selectNoHotel) {
       setSelectNoHotel(true);
     }
+
+    if (total === 600) {
+      setTotal(total - 350);
+    }
   }
 
   function chooseWithHotel() {
@@ -77,11 +84,17 @@ export default function Payment() {
     }
   }
 
-  async function submit() {
-    try {
-      await createTicketType();
-    } catch (error) {
+  async function submit(event) {
+    event.preventDefault();
 
+    const isRemote = selectPresencial ? selectPresencial : selectOnline;
+    const includesHotel = selectNoHotel ? selectNoHotel : selectWithHotel;
+
+    try { 
+      await createTicketType(total, isRemote, includesHotel, token);
+      toast('Ingresso reservado com sucesso!');
+    } catch (error) {
+      toast('Não foi possível reservar seu ingresso!');
     }
   }
 
@@ -135,7 +148,7 @@ export default function Payment() {
               Fechado! O total ficou em R${total}. Agora é só confirmar:
               </Instructions> 
             
-              <Button>
+              <Button onClick={submit}>
                 RESERVAR INGRESSO
               </Button>
             </>
@@ -150,7 +163,7 @@ export default function Payment() {
             Fechado! O total ficou em R${total}. Agora é só confirmar:
             </Instructions> 
           
-            <Button>
+            <Button onClick={submit}>
               RESERVAR INGRESSO
             </Button> 
           </>
