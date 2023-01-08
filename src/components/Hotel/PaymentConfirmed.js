@@ -58,3 +58,27 @@ export const ContainerCard = styled.div`
     flex-direction: row;
 `;
 
+export const AccommodationsTitle = styled.div`
+    width: auto;
+    height: auto;
+    display: flex;
+    flex-direction: column;
+    h4{
+        margin-top: 10px;
+        font-family: 'Roboto';
+        font-style: normal;
+        font-weight: 700;
+        font-size: 12px;
+        line-height: 14px;
+        color: #3C3C3C;
+    }
+
+    h5{
+        font-family: 'Roboto';
+        font-style: normal;
+        font-weight: 400;   
+        font-size: 12px;
+        line-height: 14px;  
+        color: #3C3C3C;
+    }
+`;

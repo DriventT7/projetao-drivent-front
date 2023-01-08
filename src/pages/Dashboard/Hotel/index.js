@@ -1,7 +1,7 @@
 import { Label, Container } from '../../../components/Hotel/PaymentNotConfirmed';
-import { Title, Subtitle, CardHotel, ContainerCard } from '../../../components/Hotel/PaymentConfirmed';
+import { Title, Subtitle, CardHotel, ContainerCard, AccommodationsTitle } from '../../../components/Hotel/PaymentConfirmed';
 import { getTicket, getTicketType } from '../../../services/ticketsApi';
-import { getHotels } from '../../../services/hotelApi';
+import { getHotels, getHotelsRoom } from '../../../services/hotelApi';
 import { useState, useEffect } from 'react';
 import useToken from '../../../hooks/useToken';
 
@@ -9,12 +9,13 @@ export default function Hotel() {
   const [ticket, setTicket] = useState({});
   const [hoteis, setHoteis] = useState([]);
   const [ticketType, setTicketType] = useState({});
-  const [chosenHotel, setChosenHotel] = useState(-1);
+  const [chosenHotel, setChosenHotel] = useState();
   const [err, setErr] = useState(0);
   const [hotelInfos, setHotelInfos] = useState();
+  const [rooms, setRooms] = useState([]);
   const token = useToken();
 
-  console.log(err);
+  console.log(hotelInfos);
   
   useEffect(() => {
     const promise = getTicket(token);
@@ -36,20 +37,32 @@ export default function Hotel() {
     });
 
     promise.catch(err => {
-      alert(err);
+      console.log(err);
     });
   }, []);
   
-  if(ticketType.includesHotel && ticket.status === 'PAID') {
+  useEffect(() => {
     const promise = getHotels(token);
     promise.then(res => {
       setHoteis(res);
     });
 
     promise.catch(err => {
-      alert(err);
+      console.log(err);
     });
-  }
+  }, []);    
+  
+  /*
+  function GetHotelsRoom(hotelInfos, token) {
+    const teste = getHotelsRoom(hotelInfos, token);
+    teste.then(res => {
+      setRooms(res.Rooms);
+    });
+
+    teste.catch(err => {
+      console.log(err);
+    });
+  }*/
 
   function Hotel( { image, name, index, id } ) { 
     function selectHotel(index) {
@@ -64,6 +77,10 @@ export default function Hotel() {
       <CardHotel color={chosenHotel === index ? '#FFEED2' : '#EBEBEB' } onClick={function() { selectHotel(index); hotel(id);}}>
         <img src={image} alt={name} />
         <h3>{name}</h3>
+        <AccommodationsTitle>
+          <h4>Tipos de acomodações</h4>
+          <h5>Teste teste</h5>
+        </AccommodationsTitle>
       </CardHotel>
     );
   }
@@ -76,7 +93,7 @@ export default function Hotel() {
           <>
             <Title>Escolha de hotel e quarto</Title>
             <Subtitle>Primeiro, escolha seu hotel</Subtitle>
-            <ContainerCard>
+            <ContainerCard >
               {hoteis.map((item, index) =>
                 <Hotel
                   image={item.image}
