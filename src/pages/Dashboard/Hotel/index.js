@@ -1,9 +1,11 @@
 import { Label, Container } from '../../../components/Hotel/PaymentNotConfirmed';
 import { Title, Subtitle, CardHotel, ContainerCard, AccommodationsTitle } from '../../../components/Hotel/PaymentConfirmed';
+import { Button } from '../../../components/Hotel/Rooms';
 import { getTicket, getTicketType } from '../../../services/ticketsApi';
 import { getHotels, getHotelsRoom } from '../../../services/hotelApi';
 import { useState, useEffect } from 'react';
 import useToken from '../../../hooks/useToken';
+import Rooms from './Rooms';
 
 export default function Hotel() {
   const [ticket, setTicket] = useState({});
@@ -15,8 +17,6 @@ export default function Hotel() {
   const [rooms, setRooms] = useState([]);
   const token = useToken();
 
-  console.log(hotelInfos);
-  
   useEffect(() => {
     const promise = getTicket(token);
     promise.then(res => {
@@ -51,30 +51,26 @@ export default function Hotel() {
       console.log(err);
     });
   }, []);    
-  
-  /*
-  function GetHotelsRoom(hotelInfos, token) {
-    const teste = getHotelsRoom(hotelInfos, token);
-    teste.then(res => {
-      setRooms(res.Rooms);
-    });
 
-    teste.catch(err => {
-      console.log(err);
-    });
-  }*/
-
-  function Hotel( { image, name, index, id } ) { 
+  function Hotel( { image, name, index, hotelId } ) { 
     function selectHotel(index) {
       return setChosenHotel(index);
     }
 
-    function hotel(id) {
-      return setHotelInfos(id);
+    function getRooms(hotelId) {
+      const response = getHotelsRoom(hotelId, token);
+      response.then(res => {
+        setRooms(res.Rooms);
+        setHotelInfos(res);
+      });
+  
+      response.catch(err => {
+        console.log(err);
+      });
     }
 
     return (
-      <CardHotel color={chosenHotel === index ? '#FFEED2' : '#EBEBEB' } onClick={function() { selectHotel(index); hotel(id);}}>
+      <CardHotel color={chosenHotel === index ? '#FFEED2' : '#EBEBEB' } onClick={function() { selectHotel(index); getRooms(hotelId);}}>
         <img src={image} alt={name} />
         <h3>{name}</h3>
         <AccommodationsTitle>
@@ -100,11 +96,19 @@ export default function Hotel() {
                   name={item.name}
                   key={index}
                   index={index}
-                  id={item.id}
+                  hotelId={item.id}
                 />
               ) 
               }
             </ContainerCard>
+
+            {hotelInfos === undefined ? null : 
+              <>
+                <Label>Ótima pedida! Agora escolha seu quarto:</Label>
+                <Rooms rooms={rooms}/>
+                <Button>RESERVAR QUARTO</Button>
+              </>}
+
           </> : ticketType.includesHotel === false ? 
             <Container>
               <Label>Sua modalidade de ingresso não inclui hospedagem Prossiga para a escolha de atividades</Label>
