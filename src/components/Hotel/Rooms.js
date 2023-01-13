@@ -7,6 +7,7 @@ export const Content = styled.div `
     display: flex;
     flex-wrap: wrap;
     justify-content: space-between;
+
 `;
 
 export const Room = styled.div`
@@ -24,6 +25,12 @@ export const Room = styled.div`
 
     ion-icon {
         height: 21px;
+    }
+`;
+
+export const Icon = styled.div`
+    ion-icon{
+        color: ${(props) => props.choosedRoom  === props.index ? '#FF4791' : 'black'}; 
     }
 `;
 

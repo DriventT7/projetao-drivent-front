@@ -2,7 +2,8 @@ import { Label, Container } from '../../../components/Hotel/PaymentNotConfirmed'
 import { Title, Subtitle, CardHotel, ContainerCard, AccommodationsTitle } from '../../../components/Hotel/PaymentConfirmed';
 import { Button } from '../../../components/Hotel/Rooms';
 import { getTicket, getTicketType } from '../../../services/ticketsApi';
-import { getHotels, getHotelsRoom } from '../../../services/hotelApi';
+import { getHotels } from '../../../services/hotelApi';
+import { getHotelRoomsAndBookings } from '../../../services/bookingsApi';
 import { useState, useEffect } from 'react';
 import useToken from '../../../hooks/useToken';
 import Rooms from './Rooms';
@@ -13,7 +14,7 @@ export default function Hotel() {
   const [ticketType, setTicketType] = useState({});
   const [chosenHotel, setChosenHotel] = useState();
   const [err, setErr] = useState(0);
-  const [hotelInfos, setHotelInfos] = useState();
+  const [roomsInfo, setRoomsInfo] = useState();
   const [rooms, setRooms] = useState([]);
   const token = useToken();
 
@@ -58,10 +59,10 @@ export default function Hotel() {
     }
 
     function getRooms(hotelId) {
-      const response = getHotelsRoom(hotelId, token);
+      const response = getHotelRoomsAndBookings(hotelId, token);
       response.then(res => {
-        setRooms(res.Rooms);
-        setHotelInfos(res);
+        setRooms(res);
+        setRoomsInfo(res);
       });
   
       response.catch(err => {
@@ -102,7 +103,7 @@ export default function Hotel() {
               }
             </ContainerCard>
 
-            {hotelInfos === undefined ? null : 
+            {roomsInfo === undefined ? null : 
               <>
                 <Label>Ótima pedida! Agora escolha seu quarto:</Label>
                 <Rooms rooms={rooms}/>
