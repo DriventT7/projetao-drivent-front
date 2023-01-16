@@ -83,12 +83,6 @@ export default function Icons({
       </>
     );
   }
+
+  return null;
 }
-
-// {function renderIcons () {
-//   item.capacity === 1 && item.Booking.length === 1 ? single = 1 : single = 0;
-
-//   item.capacity === 2 && item.Booking.length === 1 ? double = 1 : item.capacity === 2 && item.Booking.length === 2 ? double = 2 : double = 0;
-
-//   item.capacity === 3 && item.Booking.length === 1 ? triple = 1 : item.capacity === 3 && item.Booking.length === 2 ? triple = 2 : item.capacity === 3 && item.Booking.length === 3 ? triple = 3 : triple = 0;
-// }}

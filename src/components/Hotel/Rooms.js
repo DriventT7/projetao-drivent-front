@@ -55,3 +55,15 @@ export const Button = styled.div`
     margin-top: 46px;
     cursor: pointer;
 `;
+
+export const Label = styled.div`
+    width: 411px;
+    height: 46px;
+    font-family: 'Roboto';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 20px;
+    line-height: 23px;
+    color: #8E8E8E;
+    margin-top: 52px;
+`;
