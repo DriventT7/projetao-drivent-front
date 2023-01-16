@@ -1,6 +1,5 @@
 import { Label, Container } from '../../../components/Hotel/PaymentNotConfirmed';
 import { Title, Subtitle, CardHotel, ContainerCard, AccommodationsTitle } from '../../../components/Hotel/PaymentConfirmed';
-import { Button } from '../../../components/Hotel/Rooms';
 import { getTicket, getTicketType } from '../../../services/ticketsApi';
 import { getHotels } from '../../../services/hotelApi';
 import { getHotelRoomsAndBookings } from '../../../services/bookingsApi';
@@ -55,7 +54,7 @@ export default function Hotel() {
 
   function Hotel( { image, name, index, hotelId } ) { 
     function selectHotel(index) {
-      return setChosenHotel(index);
+      setChosenHotel(index);
     }
 
     function getRooms(hotelId) {
@@ -103,12 +102,7 @@ export default function Hotel() {
               }
             </ContainerCard>
 
-            {roomsInfo === undefined ? null : 
-              <>
-                <Label>Ótima pedida! Agora escolha seu quarto:</Label>
-                <Rooms rooms={rooms}/>
-                <Button>RESERVAR QUARTO</Button>
-              </>}
+            {roomsInfo === undefined ? null :  <Rooms rooms={rooms} token={token}/> }
 
           </> : ticketType.includesHotel === false ? 
             <Container>

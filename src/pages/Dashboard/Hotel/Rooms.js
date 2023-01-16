@@ -1,9 +1,15 @@
 import Icons from './Icons';
-import { useState } from 'react';
+import { useState, useContext } from 'react';
+import { Button, Label } from '../../../components/Hotel/Rooms';
 import { Content, Room, Container } from '../../../components/Hotel/Rooms';
+import { createBooking } from '../../../services/bookingsApi';
+import UserContext from '../../../contexts/UserContext';
 
-export default function Rooms({ rooms }) {
+export default function Rooms({ rooms, token }) {
   const [choosedRoom, setChoosedRoom] = useState('');
+  const [roomId, setRoomId] = useState('');
+
+  console.log(choosedRoom);
 
   function Rooms({ item, index, choosedRoom }) { 
     let single = '';
@@ -24,10 +30,11 @@ export default function Rooms({ rooms }) {
       }
     }
 
+    console.log(choosedRoom);
     return (
       <Room 
         key={index} 
-        onClick={() => { setChoosedRoom(index); }} 
+        onClick={() => { setChoosedRoom(index); setRoomId(item.id); }} 
         index={index} 
         choosedRoom={choosedRoom}
       >
@@ -49,11 +56,26 @@ export default function Rooms({ rooms }) {
     );
   }
 
+  function reserveRoom(roomId) { 
+    const promise = createBooking(roomId, token);
+    promise.then(res => {
+      console.log(res);
+    });
+  
+    promise.catch(err => {
+      console.log(err);
+    });
+
+    return null;
+  }
+
   return (
     <>
-      <Content>
+      <Label>Ótima pedida! Agora escolha seu quarto:</Label>
+      <Content> 
         {rooms.map((item, index) => <Rooms key={index} item={item} index={index} choosedRoom={choosedRoom}/>)}
       </Content>
+      <Button onClick={() => reserveRoom(roomId)}>RESERVAR QUARTO</Button>
     </>
   );
 }
